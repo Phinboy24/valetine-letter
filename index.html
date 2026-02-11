@@ -1,0 +1,375 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>A Letter for Kaila</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --paper:#fffaf0;
+  --accent:#8b1e3f;
+  --shadow:0 25px 60px rgba(0,0,0,.18);
+}
+
+*{box-sizing:border-box;}
+
+body{
+  margin:0;
+  min-height:100vh;
+  display:grid;
+  place-items:center;
+  font-family:"Cormorant Garamond", serif;
+  background:linear-gradient(135deg,#f7e9d7,#f3d2d8);
+  overflow:hidden;
+}
+
+/* ================= BACKGROUND ================= */
+
+.bgImages{
+  position:fixed;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  grid-template-rows:1fr 1fr;
+  padding:60px;
+}
+
+.bgImages img{
+  max-width:280px;
+  opacity:0.12;
+  filter:blur(1px);
+}
+
+.bg-flower{grid-column:1;grid-row:1;justify-self:start;align-self:start;}
+.bg-water{grid-column:2;grid-row:1;justify-self:end;align-self:start;}
+.bg-horse{grid-column:1;grid-row:2;justify-self:start;align-self:end;}
+.bg-us{
+  grid-column:2;
+  grid-row:2;
+  justify-self:end;
+  align-self:end;
+  max-width:360px;
+  opacity:0.10;
+}
+
+/* ================= STAGE ================= */
+
+.stage{
+  position:relative;
+  z-index:2;
+  width:min(560px,90vw);
+  height:460px;
+}
+
+.wrap{
+  position:relative;
+  width:100%;
+  height:100%;
+}
+
+/* Click overlay */
+.openCover{
+  position:absolute;
+  inset:0;
+  z-index:50;
+  background:transparent;
+  border:0;
+  cursor:pointer;
+}
+.opened .openCover{display:none;}
+
+/* ================= LETTER ================= */
+
+.letterStack{
+  position:absolute;
+  left:50%;
+  bottom:80px;
+  transform:translateX(-50%);
+  width:min(520px,92vw);
+  height:360px;
+  z-index:30;
+  pointer-events:none;
+}
+
+.opened .letterStack{pointer-events:auto;}
+
+.letter{
+  position:absolute;
+  inset:0;
+  background:var(--paper);
+  border-radius:14px;
+  box-shadow:var(--shadow);
+  border:1px solid rgba(0,0,0,.06);
+  transform:translateY(200px);
+  opacity:0;
+  transition:all .9s ease;
+  padding:30px 30px 120px;
+  overflow:auto;
+}
+
+.opened .letter{
+  transform:translateY(-165px);
+  opacity:1;
+}
+
+.page{display:none;}
+.page.active{display:block;}
+
+h1{
+  font-family:"Dancing Script",cursive;
+  font-size:44px;
+  margin:0 0 10px;
+}
+
+p{
+  font-size:20px;
+  line-height:1.6;
+  margin:10px 0;
+}
+
+/* CLEAN BUTTON ROW (NO WHITE STRIP) */
+.navRow{
+  position:absolute;
+  bottom:18px;
+  left:30px;
+  right:30px;
+  display:flex;
+  justify-content:space-between;
+}
+
+button.action{
+  padding:10px 18px;
+  border-radius:999px;
+  border:0;
+  font-size:16px;
+  cursor:pointer;
+  font-family:inherit;
+}
+
+.primary{background:var(--accent);color:white;}
+.ghost{background:rgba(0,0,0,.08);}
+
+.valRow{
+  margin-top:18px;
+  display:flex;
+  justify-content:center;
+  gap:14px;
+  align-items:center;
+}
+
+.noArea{
+  position:relative;
+  width:210px;
+  height:72px;
+}
+#noBtn{
+  position:absolute;
+  left:0;
+  top:0;
+  width:160px;
+  height:50px;
+}
+
+/* ================= ENVELOPE ================= */
+
+.envBase{
+  position:absolute;
+  bottom:0;
+  left:0;
+  right:0;
+  height:240px;
+  background:#fff3ea;
+  border-radius:14px;
+  box-shadow:var(--shadow);
+  z-index:10;
+}
+
+.envFlap{
+  position:absolute;
+  top:36px;
+  left:0;
+  right:0;
+  margin:auto;
+  width:0;height:0;
+  border-left:280px solid transparent;
+  border-right:280px solid transparent;
+  border-bottom:170px solid #f2c7c6;
+  transform-origin:top;
+  transition:transform .9s ease;
+}
+
+.opened .envFlap{transform:rotateX(180deg);}
+
+.toName{
+  position:absolute;
+  bottom:60px;
+  left:0;
+  right:0;
+  text-align:center;
+  font-family:"Dancing Script",cursive;
+  font-size:46px;
+}
+
+.seal{
+  position:absolute;
+  bottom:95px;
+  left:0;
+  right:0;
+  margin:auto;
+  width:70px;height:70px;
+  border-radius:50%;
+  background:#8b1e3f;
+  display:grid;
+  place-items:center;
+  color:white;
+  font-size:22px;
+}
+
+.hint{
+  position:absolute;
+  left:0; right:0;
+  bottom:-45px;
+  text-align:center;
+  opacity:.75;
+}
+
+@media (max-width:560px){
+  .stage{height:500px;}
+  h1{font-size:40px;}
+  p{font-size:19px;}
+}
+</style>
+</head>
+
+<body>
+
+<div class="bgImages">
+  <img src="images/Flower.png" class="bg-flower">
+  <img src="images/Water.png" class="bg-water">
+  <img src="images/Horse.png" class="bg-horse">
+  <img src="images/US.png" class="bg-us">
+</div>
+
+<div class="stage">
+  <div class="wrap" id="wrap">
+
+    <button class="openCover" id="openCover"></button>
+
+    <div class="letterStack">
+      <div class="letter">
+
+        <div class="page active" id="page1">
+          <h1>My Dearest Kaila,</h1>
+          <p>I wanted you to open something intentional. Something made just for you.</p>
+          <p>Since summer 2024, you’ve made my life brighter in the sweetest ways.</p>
+          <p>Every adventure, every laugh, every calm moment — I’m grateful it’s you.</p>
+
+          <div class="navRow">
+            <span></span>
+            <button class="action primary" onclick="go(2)">Next</button>
+          </div>
+        </div>
+
+        <div class="page" id="page2">
+          <h1>One question…</h1>
+          <p style="text-align:center;font-weight:600;">
+            Will you be my Valentine? ❤️
+          </p>
+
+          <div class="valRow">
+            <button class="action primary" onclick="yes()">Yes 💘</button>
+            <div class="noArea">
+              <button class="action ghost" id="noBtn">No</button>
+            </div>
+          </div>
+
+          <p id="yesMsg" style="display:none;text-align:center;font-weight:600;margin-top:12px;">
+            YAY 😭💞 okay keep going…
+          </p>
+
+          <div class="navRow">
+            <button class="action ghost" onclick="go(1)">Back</button>
+            <button class="action primary" onclick="go(3)">Next</button>
+          </div>
+        </div>
+
+        <div class="page" id="page3">
+          <h1>February 14th 💘</h1>
+          <p><strong>Friday, February 14th</strong></p>
+          <p><strong>3:00 PM</strong></p>
+          <p>Reservation at <strong>Shogun — San Diego</strong></p>
+          <p style="margin-top:18px;">
+            I wanted to start our Valentine’s Day a little early  
+            so we can take our time, laugh, eat well,  
+            and enjoy the moment together.
+          </p>
+          <p style="margin-top:16px;font-style:italic;">
+            Dress cute. I’ll handle the rest. ❤️
+          </p>
+
+          <div class="navRow">
+            <button class="action ghost" onclick="go(2)">Back</button>
+            <button class="action primary" onclick="go(1)">Read Again</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="envBase">
+      <div class="envFlap"></div>
+      <div class="seal">❤️</div>
+      <div class="toName">Kaila</div>
+    </div>
+
+    <div class="hint">Click anywhere on the envelope to open 💌</div>
+
+  </div>
+</div>
+
+<script>
+const wrap = document.getElementById("wrap");
+document.getElementById("openCover")
+.addEventListener("click",()=>wrap.classList.add("opened"));
+
+function go(n){
+  document.querySelectorAll(".page")
+  .forEach(p=>p.classList.remove("active"));
+  document.getElementById("page"+n)
+  .classList.add("active");
+}
+
+function yes(){
+  document.getElementById("yesMsg").style.display="block";
+  setTimeout(()=>go(3),650);
+}
+
+const noBtn=document.getElementById("noBtn");
+const noArea=document.querySelector(".noArea");
+
+function moveNo(){
+  const area=noArea.getBoundingClientRect();
+  const btn=noBtn.getBoundingClientRect();
+  const maxX=area.width-btn.width;
+  const maxY=area.height-btn.height;
+  noBtn.style.left=Math.random()*maxX+"px";
+  noBtn.style.top=Math.random()*maxY+"px";
+}
+
+noBtn.addEventListener("mouseenter",moveNo);
+noBtn.addEventListener("pointerenter",moveNo);
+noBtn.addEventListener("touchstart",(e)=>{
+  e.preventDefault();
+  moveNo();
+},{passive:false});
+</script>
+
+</body>
+</html>
